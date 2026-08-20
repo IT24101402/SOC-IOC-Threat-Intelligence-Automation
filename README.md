@@ -75,8 +75,27 @@ Custom JavaScript logic calculates the IOC risk score, and a Switch node classif
 
 ---
 
+---
+
+## SOC Monitoring Dashboard
+
+The investigation results are recorded in Google Sheets and presented through a SOC monitoring dashboard, providing a centralized view of IOC alerts and analyst investigation activities.
+
+The dashboard provides:
+
+- Total alert count and severity-based KPI indicators
+- Alert severity distribution
+- Recent IOC alerts with IP addresses and risk scores
+- Investigation status tracking
+- Analyst decisions such as False Positive, Needs Further Investigation, and True Positive
+- Analyst investigation notes and escalation tracking
+
+![SOC IOC Monitoring Dashboard](Docs/Dashboard.png)
+
+---
+
 ## Project Status
 
-Core workflow and SOC dashboard completed.
+Core workflow, automated threat intelligence enrichment, risk scoring, severity-based alerting, Google Sheets logging, and SOC investigation dashboard are operational.
 
-Additional documentation, screenshots, risk-scoring methodology, and sanitized workflow files will be added to this repository.
+The repository documents a completed portfolio implementation using simulated IOC investigation scenarios.
