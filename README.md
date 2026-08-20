@@ -44,6 +44,36 @@ Custom JavaScript logic calculates the IOC risk score, and a Switch node classif
 ![n8n SOC IOC Automation Workflow](Docs/n8n-workflow.png)
 
 
+---
+
+## Risk Scoring Methodology
+
+Threat intelligence collected from VirusTotal and AbuseIPDB is normalized and evaluated using custom JavaScript logic in n8n.
+
+The risk score is calculated using multiple indicators rather than relying on a single threat intelligence source.
+
+| Indicator | Scoring Logic |
+|---|---|
+| VirusTotal malicious detections | 10 points per detection, maximum 40 |
+| VirusTotal suspicious detections | 5 points per detection, maximum 10 |
+| AbuseIPDB confidence score | Weighted contribution up to 40 points |
+| AbuseIPDB reports ≥ 20 | +5 points |
+| AbuseIPDB reports ≥ 100 | +10 points |
+| Tor exit node | +10 points |
+| Whitelisted IP | -20 points |
+
+The resulting score is used to classify the IOC into four severity levels:
+
+| Risk Score | Severity |
+|---|---|
+| 0–19 | LOW |
+| 20–39 | MEDIUM |
+| 40–69 | HIGH |
+| 70+ | CRITICAL |
+
+This scoring model was developed for this portfolio/lab environment and is intended to demonstrate multi-source IOC correlation and automated risk prioritization. It should not be treated as a production threat-scoring model.
+
+
 ## Technologies Used
 
 - n8n
