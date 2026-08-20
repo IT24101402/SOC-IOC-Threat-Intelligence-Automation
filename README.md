@@ -35,6 +35,15 @@ The workflow integrates multiple threat intelligence and automation components t
 ![SOC IOC Threat Intelligence Automation Architecture](Docs/Architecture.png)
 ---
 
+## Workflow Implementation
+
+The automation was implemented in n8n using a webhook-driven workflow. Incoming IP addresses are enriched using VirusTotal and AbuseIPDB, after which the returned threat intelligence is normalized and merged.
+
+Custom JavaScript logic calculates the IOC risk score, and a Switch node classifies the result into LOW, MEDIUM, HIGH, or CRITICAL severity levels. Investigation results are logged in Google Sheets, while severity-specific email alerts are generated automatically through Gmail.
+
+![n8n SOC IOC Automation Workflow](Docs/n8n-workflow.png)
+
+
 ## Technologies Used
 
 - n8n
