@@ -124,6 +124,33 @@ The dashboard provides:
 
 ---
 
+## Testing & Validation
+
+The workflow was tested using simulated IOC investigation scenarios representing different risk levels. These tests were used to verify threat intelligence enrichment, risk scoring, severity classification, alert logging, and email notification behavior.
+
+Test scenarios included:
+
+| Test Scenario | Expected Severity | Validation |
+|---|---|---|
+| Low-risk IOC | LOW | Logged successfully and low-severity alert generated |
+| Medium-risk IOC | MEDIUM | Correctly classified and routed through the medium alert path |
+| High-risk IOC | HIGH | Correctly classified and routed through the high alert path |
+| Critical-risk IOC | CRITICAL | Correctly classified, escalated, and critical alert generated |
+
+Testing confirmed that the workflow could:
+
+- Receive IOC data through the webhook
+- Query VirusTotal and AbuseIPDB successfully
+- Normalize and correlate intelligence from multiple sources
+- Calculate the custom risk score
+- Route alerts according to severity
+- Record investigation data in Google Sheets
+- Generate severity-specific email notifications
+- Support analyst status and decision tracking through the SOC dashboard
+
+All test scenarios were performed in a controlled portfolio/lab environment using simulated alerts.
+
+
 ## Project Status
 
 Core workflow, automated threat intelligence enrichment, risk scoring, severity-based alerting, Google Sheets logging, and SOC investigation dashboard are operational.
