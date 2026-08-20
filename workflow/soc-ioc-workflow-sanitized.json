@@ -1,1 +1,1244 @@
-
+{
+  "name": "SOC - IOC Enrichment Engine v1",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://www.virustotal.com/api/v3/ip_addresses/{{$json.ip_address}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-apikey",
+              "value": "YOUR_VIRUSTOTAL_API_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -320,
+        -448
+      ],
+      "id": "b04322e5-c01e-46c9-b4ca-01799b64cb94",
+      "name": "VirusTotal - IP Reputation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2c21b19d-0bce-4557-8dc8-66e5a8ded3da",
+              "name": "vt_ip",
+              "value": "={{ $json.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "5977150d-adae-4743-a588-2b97ea1e6eec",
+              "name": "vt_as_owner",
+              "value": "={{ $json.data.attributes.as_owner }}",
+              "type": "string"
+            },
+            {
+              "id": "af6ef00b-1503-4ebc-b634-2071db20274d",
+              "name": "vt_country",
+              "value": "={{ $json.data.attributes.country }}",
+              "type": "string"
+            },
+            {
+              "id": "9cb29fc2-1ac4-4e2c-a9b2-1977435396bc",
+              "name": "vt_reputation",
+              "value": "={{ $json.data.attributes.reputation }}",
+              "type": "number"
+            },
+            {
+              "id": "b97d9c4e-d2b1-443a-a9d1-3f6ef29d6006",
+              "name": "vt_malicious",
+              "value": "={{ $json.data.attributes.last_analysis_stats.malicious }}",
+              "type": "number"
+            },
+            {
+              "id": "a14a30c4-7ec0-41d9-939e-e46737d6361a",
+              "name": "vt_suspicious",
+              "value": "={{ $json.data.attributes.last_analysis_stats.suspicious }}",
+              "type": "number"
+            },
+            {
+              "id": "926f5532-b81c-42ff-8d5a-307a1a881a59",
+              "name": "vt_harmless",
+              "value": "={{ $json.data.attributes.last_analysis_stats.harmless }}",
+              "type": "number"
+            },
+            {
+              "id": "d18a7b68-bc58-42af-a0bf-027f541e0373",
+              "name": "vt_undetected",
+              "value": "={{ $json.data.attributes.last_analysis_stats.undetected }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -128,
+        -448
+      ],
+      "id": "294f7365-3471-4a9e-95b6-263202fde8d2",
+      "name": "Extract VirusTotal Results"
+    },
+    {
+      "parameters": {
+        "url": "https://api.abuseipdb.com/api/v2/check",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ipAddress",
+              "value": "={{ $json.ip_address }}"
+            },
+            {
+              "name": "maxAgeInDays",
+              "value": "90"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Key",
+              "value": "YOUR_ABUSEIPDB_API_KEY"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -320,
+        -288
+      ],
+      "id": "5be419e1-0be4-43fd-a701-a1a8cd4773d3",
+      "name": "AbuseIPDB - IP Reputation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01feadbd-36bd-4985-b5e0-fa228ad78682",
+              "name": "abuse_ip",
+              "value": "={{ $json.data.ipAddress }}",
+              "type": "string"
+            },
+            {
+              "id": "fe69dae0-d7d6-4310-ad9a-1a757b5e173d",
+              "name": "abuse_score",
+              "value": "={{ $json.data.abuseConfidenceScore }}",
+              "type": "number"
+            },
+            {
+              "id": "db06bc79-14df-4157-835b-e9f5f29c6ac6",
+              "name": "abuse_country",
+              "value": "={{ $json.data.countryCode }}",
+              "type": "string"
+            },
+            {
+              "id": "8e913d02-4f0d-4358-9807-a7fa27411c4f",
+              "name": "abuse_isp",
+              "value": "={{ $json.data.isp }}",
+              "type": "string"
+            },
+            {
+              "id": "6197384a-efd5-4112-b0e1-cdef501b58a0",
+              "name": "abuse_usage_type",
+              "value": "={{ $json.data.usageType }}",
+              "type": "string"
+            },
+            {
+              "id": "d844bf7b-898e-4cd8-bd57-b107bea7fc40",
+              "name": "abuse_total_reports",
+              "value": "={{ $json.data.totalReports }}",
+              "type": "number"
+            },
+            {
+              "id": "28a3440c-15c1-4e66-a83d-95d4ca2e91a8",
+              "name": "abuse_distinct_users",
+              "value": "={{ $json.data.numDistinctUsers }}",
+              "type": "number"
+            },
+            {
+              "id": "a35a318e-c251-4071-b842-59708aa7d0de",
+              "name": "abuse_is_whitelisted",
+              "value": "={{ $json.data.isWhitelisted }}",
+              "type": "boolean"
+            },
+            {
+              "id": "25f9ba8e-dc98-4ae8-bfb5-733ada34dd3d",
+              "name": "abuse_is_tor",
+              "value": "={{ $json.data.isTor }}",
+              "type": "boolean"
+            },
+            {
+              "id": "4f04f800-059f-483a-b242-212f11bd7441",
+              "name": "abuse_last_reported",
+              "value": "={{ $json.data.lastReportedAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -160,
+        -240
+      ],
+      "id": "21ecff4b-781a-45a5-8601-db50bdc4f6e4",
+      "name": "Extract AbuseIPDB Results"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        48,
+        96
+      ],
+      "id": "44da90b4-594b-436d-867d-942dca8b56a8",
+      "name": "Merge Threat Intelligence"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const d = item.json;\n\n  const vtMalicious = Number(d.vt_malicious || 0);\n  const vtSuspicious = Number(d.vt_suspicious || 0);\n  const abuseScore = Number(d.abuse_score || 0);\n  const totalReports = Number(d.abuse_total_reports || 0);\n  const isTor = d.abuse_is_tor === true;\n  const isWhitelisted = d.abuse_is_whitelisted === true;\n\n  let riskScore = 0;\n\n  // VirusTotal contribution\n  riskScore += Math.min(vtMalicious * 10, 40);\n  riskScore += Math.min(vtSuspicious * 5, 10);\n\n  // AbuseIPDB contribution\n  riskScore += Math.min(abuseScore * 0.4, 40);\n\n  // Number of AbuseIPDB reports\n  if (totalReports >= 100) {\n    riskScore += 10;\n  } else if (totalReports >= 20) {\n    riskScore += 5;\n  }\n\n  // Tor exit node\n  if (isTor) {\n    riskScore += 10;\n  }\n\n  // Reduce score for whitelisted IPs\n  if (isWhitelisted) {\n    riskScore -= 10;\n  }\n\n  // Keep score between 0 and 100\n  riskScore = Math.max(0, Math.min(100, Math.round(riskScore)));\n\n  let riskLevel;\n\n  if (riskScore >= 70) {\n    riskLevel = \"CRITICAL\";\n  } else if (riskScore >= 40) {\n    riskLevel = \"HIGH\";\n  } else if (riskScore >= 20) {\n    riskLevel = \"MEDIUM\";\n  } else {\n    riskLevel = \"LOW\";\n  }\n\n  let recommendedAction;\n\n  if (riskLevel === \"CRITICAL\") {\n    recommendedAction =\n      \"Escalate immediately. Consider blocking the IP, investigate affected assets and related network activity, and initiate incident response procedures if malicious activity is confirmed.\";\n  } else if (riskLevel === \"HIGH\") {\n    recommendedAction =\n      \"Investigate immediately. Review associated hosts, users, logs, and connections, and consider blocking the IP if malicious activity is confirmed.\";\n  } else if (riskLevel === \"MEDIUM\") {\n    recommendedAction =\n      \"Review related logs and network activity. Continue monitoring the IP for additional suspicious indicators or repeated connections.\";\n  } else {\n    recommendedAction =\n      \"Continue monitoring. No immediate blocking action is required unless additional suspicious activity is detected.\";\n  }\n\n  return {\n    json: {\n      ...d,\n      risk_score: riskScore,\n      risk_level: riskLevel,\n      recommended_action: recommendedAction,\n      analysis_summary:\n        `Alert ${d.alert_id || \"N/A\"} (${d.alert_name || \"Unknown Alert\"}) from ${d.alert_source || \"Unknown Source\"} detected IP ${d.ip_address || d.vt_ip || d.abuse_ip} on host ${d.affected_host || \"N/A\"}. Risk score: ${riskScore}/100 (${riskLevel}).`\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -128
+      ],
+      "id": "1f1152c5-44a0-41f7-bc01-25112f0d2126",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.risk_level }}",
+                    "rightValue": "LOW",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "fd171524-3616-47b9-b729-24ee51c70d46"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "LOW"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fa135fb3-ba78-4217-bd68-e36fdf8d80ef",
+                    "leftValue": "={{ $json.risk_level }}",
+                    "rightValue": "MEDIUM",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MEDIUM"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "efc76442-85cd-47a1-9a10-b0d92f19d56f",
+                    "leftValue": "={{ $json.risk_level }}",
+                    "rightValue": "HIGH",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "HIGH"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "470384c0-516b-4617-afdd-342531070998",
+                    "leftValue": "={{ $json.risk_level }}",
+                    "rightValue": "CRITICAL",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CRITICAL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -160
+      ],
+      "id": "4286396b-14c4-439b-a5f2-8d1cc4855d8f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a70c05e-bd92-4685-86be-f108e7289482",
+              "name": "alert_title",
+              "value": "CRITICAL IOC ALERT",
+              "type": "string"
+            },
+            {
+              "id": "ad3f79e5-8c82-405d-8d8d-50f39a074371",
+              "name": "ip_address",
+              "value": "={{ $json.vt_ip }}",
+              "type": "string"
+            },
+            {
+              "id": "8bca90a2-65e0-4b80-ad18-c7bc17619e70",
+              "name": "severity",
+              "value": "={{ $json.risk_level }}",
+              "type": "string"
+            },
+            {
+              "id": "d4343ff6-d204-4fc3-9f1c-8d36236d2df0",
+              "name": "risk_score",
+              "value": "={{ $json.risk_score }}",
+              "type": "number"
+            },
+            {
+              "id": "6e27eadf-47af-4660-8d8f-e47e3218c785",
+              "name": "vt_malicious",
+              "value": "={{ $json.vt_malicious }}",
+              "type": "number"
+            },
+            {
+              "id": "99f06982-b83f-4998-95e8-5357b6856823",
+              "name": "vt_suspicious",
+              "value": "={{ $json.vt_suspicious }}",
+              "type": "number"
+            },
+            {
+              "id": "5bbb183e-aeab-4924-a24c-6b2dded2baaa",
+              "name": "abuse_confidence",
+              "value": "={{ $json.abuse_score }}",
+              "type": "number"
+            },
+            {
+              "id": "398f4929-3dca-4b9d-953a-a6b870524664",
+              "name": "abuse_reports",
+              "value": "={{ $json.abuse_total_reports }}",
+              "type": "number"
+            },
+            {
+              "id": "18b1f314-2fe1-47d9-bf5c-d6a24231da3e",
+              "name": "is_tor",
+              "value": "={{ $json.abuse_is_tor }}",
+              "type": "boolean"
+            },
+            {
+              "id": "f5cca113-a0a4-4ded-bd25-4314fb6acb7e",
+              "name": "recommended_action",
+              "value": "={{ $json.recommended_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        112
+      ],
+      "id": "13e3e925-5483-42ff-acf1-0acc59798e5c",
+      "name": "Critical Alert Formatter"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfaaf15b-c9e8-41b7-a157-3f3441f57aa1",
+              "name": "alert_title",
+              "value": "HIGH IOC ALERT",
+              "type": "string"
+            },
+            {
+              "id": "3de9a998-a163-42f1-a7a9-6fc5d9b0aef3",
+              "name": "ip_address",
+              "value": "={{ $json.vt_ip }}",
+              "type": "string"
+            },
+            {
+              "id": "62eb4495-4dcb-44f1-93b5-680becf7c2ca",
+              "name": "severity",
+              "value": "={{ $json.risk_level }}",
+              "type": "string"
+            },
+            {
+              "id": "2dbfebf4-9a76-41e1-9daf-c6c02b2dc583",
+              "name": "risk_score",
+              "value": "={{ $json.risk_score }}",
+              "type": "number"
+            },
+            {
+              "id": "25acedf2-aa15-4705-811c-4af32431a099",
+              "name": "vt_malicious",
+              "value": "={{ $json.vt_malicious }}",
+              "type": "number"
+            },
+            {
+              "id": "c05e503b-c69d-4cbd-aea1-05f7cfc065a4",
+              "name": "vt_suspicious",
+              "value": "={{ $json.vt_suspicious }}",
+              "type": "number"
+            },
+            {
+              "id": "8f479517-69ad-4c8e-9e18-5047875bd98a",
+              "name": "abuse_confidence",
+              "value": "={{ $json.abuse_score }}",
+              "type": "number"
+            },
+            {
+              "id": "d6bd79cc-53dd-4baa-ad82-794eba9c5abd",
+              "name": "abuse_reports",
+              "value": "={{ $json.abuse_total_reports }}",
+              "type": "number"
+            },
+            {
+              "id": "4d2cc608-4b28-4f13-80b2-eaab551b2d57",
+              "name": "is_tor",
+              "value": "={{ $json.abuse_is_tor }}",
+              "type": "boolean"
+            },
+            {
+              "id": "72b4917c-ba3a-4b69-8c5e-8e55d442926a",
+              "name": "recommended_action",
+              "value": "={{ $json.recommended_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        -48
+      ],
+      "id": "cb3806da-8bea-4713-9505-11af7bd7a956",
+      "name": "High Alert Formatter"
+    },
+    {
+      "parameters": {
+        "sendTo": "your-email@example.com",
+        "subject": "=⚠️ SOC Alert: {{ $json.alert_title }} | {{ $json.severity }}",
+        "message": "=<h2>🚨 SOC Security Alert</h2>  <p><strong>Alert:</strong> {{ $json.alert_title }}</p> <p><strong>Severity:</strong> {{ $json.severity }}</p> <p><strong>IP Address:</strong> {{ $json.ip_address }}</p> <p><strong>Risk Score:</strong> {{ $json.risk_score }}</p>  <hr>  <h3>Threat Intelligence</h3>  <p><strong>VirusTotal Malicious:</strong> {{ $json.vt_malicious }}</p> <p><strong>VirusTotal Suspicious:</strong> {{ $json.vt_suspicious }}</p> <p><strong>AbuseIPDB Confidence:</strong> {{ $json.abuse_confidence }}%</p> <p><strong>AbuseIPDB Reports:</strong> {{ $json.abuse_reports }}</p> <p><strong>TOR Exit Node:</strong> {{ $json.is_tor }}</p>  <hr>  <h3>Recommended Action</h3> <p>{{ $json.recommended_action }}</p>  <p><em>Generated automatically by SOC IOC Enrichment Workflow.</em></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -96
+      ],
+      "id": "dfe31d54-8890-4ef2-984a-31821be670aa",
+      "name": "Send High Alert Email"
+    },
+    {
+      "parameters": {
+        "sendTo": "your-email@example.com",
+        "subject": "=🚨 SOC Alert: {{ $json.alert_title }} | {{ $json.severity }}",
+        "message": "=<h2>🚨 SOC Security Alert</h2>  <p><strong>Alert:</strong> {{ $json.alert_title }}</p> <p><strong>Severity:</strong> {{ $json.severity }}</p> <p><strong>IP Address:</strong> {{ $json.ip_address }}</p> <p><strong>Risk Score:</strong> {{ $json.risk_score }}</p>  <hr>  <h3>Threat Intelligence</h3>  <p><strong>VirusTotal Malicious:</strong> {{ $json.vt_malicious }}</p> <p><strong>VirusTotal Suspicious:</strong> {{ $json.vt_suspicious }}</p> <p><strong>AbuseIPDB Confidence:</strong> {{ $json.abuse_confidence }}%</p> <p><strong>AbuseIPDB Reports:</strong> {{ $json.abuse_reports }}</p> <p><strong>TOR Exit Node:</strong> {{ $json.is_tor }}</p>  <hr>  <h3>Recommended Action</h3> <p>{{ $json.recommended_action }}</p>  <p><em>Generated automatically by SOC IOC Enrichment Workflow.</em></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        80
+      ],
+      "id": "5ad19af5-4bae-4eb9-bae3-ffea91a7d11b",
+      "name": "Send critical Alert Email"
+    },
+    {
+      "parameters": {
+        "sendTo": "your-email@example.com",
+        "subject": "=⚠️ SOC Alert: {{ $json.alert_title }} | {{ $json.severity }}",
+        "message": "=<h2>🚨 SOC Security Alert</h2>  <p><strong>Alert:</strong> {{ $json.alert_title }}</p> <p><strong>Severity:</strong> {{ $json.severity }}</p> <p><strong>IP Address:</strong> {{ $json.ip_address }}</p> <p><strong>Risk Score:</strong> {{ $json.risk_score }}</p>  <hr>  <h3>Threat Intelligence</h3>  <p><strong>VirusTotal Malicious:</strong> {{ $json.vt_malicious }}</p> <p><strong>VirusTotal Suspicious:</strong> {{ $json.vt_suspicious }}</p> <p><strong>AbuseIPDB Confidence:</strong> {{ $json.abuse_confidence }}%</p> <p><strong>AbuseIPDB Reports:</strong> {{ $json.abuse_reports }}</p> <p><strong>TOR Exit Node:</strong> {{ $json.is_tor }}</p>  <hr>  <h3>Recommended Action</h3> <p>{{ $json.recommended_action }}</p>  <p><em>Generated automatically by SOC IOC Enrichment Workflow.</em></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -272
+      ],
+      "id": "3ce123c2-2a7c-4ac0-b7bd-389e7459ede1",
+      "name": "Send Medium Alert Email1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfaaf15b-c9e8-41b7-a157-3f3441f57aa1",
+              "name": "alert_title",
+              "value": "LOW IOC ALERT",
+              "type": "string"
+            },
+            {
+              "id": "3de9a998-a163-42f1-a7a9-6fc5d9b0aef3",
+              "name": "ip_address",
+              "value": "={{ $json.ip_address || $json.vt_ip || $json.abuse_ip }}",
+              "type": "string"
+            },
+            {
+              "id": "62eb4495-4dcb-44f1-93b5-680becf7c2ca",
+              "name": "severity",
+              "value": "={{ $json.risk_level }}",
+              "type": "string"
+            },
+            {
+              "id": "2dbfebf4-9a76-41e1-9daf-c6c02b2dc583",
+              "name": "risk_score",
+              "value": "={{ $json.risk_score }}",
+              "type": "number"
+            },
+            {
+              "id": "25acedf2-aa15-4705-811c-4af32431a099",
+              "name": "vt_malicious",
+              "value": "={{ $json.vt_malicious }}",
+              "type": "number"
+            },
+            {
+              "id": "c05e503b-c69d-4cbd-aea1-05f7cfc065a4",
+              "name": "vt_suspicious",
+              "value": "={{ $json.vt_suspicious }}",
+              "type": "number"
+            },
+            {
+              "id": "8f479517-69ad-4c8e-9e18-5047875bd98a",
+              "name": "abuse_confidence",
+              "value": "={{ $json.abuse_score }}",
+              "type": "number"
+            },
+            {
+              "id": "d6bd79cc-53dd-4baa-ad82-794eba9c5abd",
+              "name": "abuse_reports",
+              "value": "={{ $json.abuse_total_reports }}",
+              "type": "number"
+            },
+            {
+              "id": "4d2cc608-4b28-4f13-80b2-eaab551b2d57",
+              "name": "is_tor",
+              "value": "={{ $json.abuse_is_tor }}",
+              "type": "boolean"
+            },
+            {
+              "id": "72b4917c-ba3a-4b69-8c5e-8e55d442926a",
+              "name": "recommended_action",
+              "value": "={{ $json.recommended_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        -368
+      ],
+      "id": "f0d925f3-f936-4edc-9499-18538b9adc60",
+      "name": "Low Alert Formatter"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfaaf15b-c9e8-41b7-a157-3f3441f57aa1",
+              "name": "alert_title",
+              "value": "MEDIUM IOC ALERT",
+              "type": "string"
+            },
+            {
+              "id": "3de9a998-a163-42f1-a7a9-6fc5d9b0aef3",
+              "name": "ip_address",
+              "value": "={{ $json.vt_ip }}",
+              "type": "string"
+            },
+            {
+              "id": "62eb4495-4dcb-44f1-93b5-680becf7c2ca",
+              "name": "severity",
+              "value": "={{ $json.risk_level }}",
+              "type": "string"
+            },
+            {
+              "id": "2dbfebf4-9a76-41e1-9daf-c6c02b2dc583",
+              "name": "risk_score",
+              "value": "={{ $json.risk_score }}",
+              "type": "number"
+            },
+            {
+              "id": "25acedf2-aa15-4705-811c-4af32431a099",
+              "name": "vt_malicious",
+              "value": "={{ $json.vt_malicious }}",
+              "type": "number"
+            },
+            {
+              "id": "c05e503b-c69d-4cbd-aea1-05f7cfc065a4",
+              "name": "vt_suspicious",
+              "value": "={{ $json.vt_suspicious }}",
+              "type": "number"
+            },
+            {
+              "id": "8f479517-69ad-4c8e-9e18-5047875bd98a",
+              "name": "abuse_confidence",
+              "value": "={{ $json.abuse_score }}",
+              "type": "number"
+            },
+            {
+              "id": "d6bd79cc-53dd-4baa-ad82-794eba9c5abd",
+              "name": "abuse_reports",
+              "value": "={{ $json.abuse_total_reports }}",
+              "type": "number"
+            },
+            {
+              "id": "4d2cc608-4b28-4f13-80b2-eaab551b2d57",
+              "name": "is_tor",
+              "value": "={{ $json.abuse_is_tor }}",
+              "type": "boolean"
+            },
+            {
+              "id": "72b4917c-ba3a-4b69-8c5e-8e55d442926a",
+              "name": "recommended_action",
+              "value": "={{ $json.recommended_action }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        -208
+      ],
+      "id": "70199ff8-7eec-4a3f-9653-b0b8269b64dc",
+      "name": "Medium Alert Formatter"
+    },
+    {
+      "parameters": {
+        "sendTo": "your-email@example.com",
+        "subject": "=🟢 SOC Alert | {{ $json.severity }} | {{ $json.ip_address }} | {{ $json.alert_id }}",
+        "message": "=<h2>🟢 SOC Security Alert - LOW</h2>  <p>A low-risk Indicator of Compromise (IOC) has been detected and automatically enriched by the SOC IOC Enrichment Engine.</p>  <hr>  <h3>Alert Information</h3>  <p> <strong>Alert ID:</strong> {{ $json.alert_id }}<br> <strong>Alert Name:</strong> {{ $json.alert_name }}<br> <strong>Alert Source:</strong> {{ $json.alert_source }}<br> <strong>Affected Host:</strong> {{ $json.affected_host }}<br> <strong>Event Time:</strong> {{ $json.event_time }} </p>  <h3>IOC Information</h3>  <p> <strong>IP Address:</strong> {{ $json.ip_address }}<br> <strong>Risk Score:</strong> {{ $json.risk_score }}/100<br> <strong>Severity:</strong> {{ $json.severity }} </p>  <h3>VirusTotal Intelligence</h3>  <p> <strong>Malicious Detections:</strong> {{ $json.vt_malicious }}<br> <strong>Suspicious Detections:</strong> {{ $json.vt_suspicious }}<br> <strong>Reputation:</strong> {{ $json.vt_reputation }}<br> <strong>Country:</strong> {{ $json.vt_country }}<br> <strong>Network Owner:</strong> {{ $json.vt_as_owner }} </p>  <h3>AbuseIPDB Intelligence</h3>  <p> <strong>Abuse Confidence Score:</strong> {{ $json.abuse_confidence }}%<br> <strong>Total Reports:</strong> {{ $json.abuse_reports }}<br> <strong>ISP:</strong> {{ $json.abuse_isp }}<br> <strong>Country:</strong> {{ $json.abuse_country }}<br> <strong>Tor Exit Node:</strong> {{ $json.is_tor }} </p>  <h3>Recommended Action</h3>  <p>{{ $json.recommended_action }}</p>  <hr>  <p><strong>Analysis Summary:</strong><br> {{ $json.analysis_summary }}</p>  <p><em>This alert was automatically generated by the SOC IOC Enrichment Engine.</em></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -432
+      ],
+      "id": "826670c1-6dce-4223-b135-1f4bd30b23ba",
+      "name": "Send Low Alert Email"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SOC IOC Investigation Log"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "IP Address": "={{ $json.vt_ip }}",
+            "Risk Score": "={{ $json.risk_score }}",
+            "Risk Level": "={{ $json.risk_level }}",
+            "VirusTotal Malicious": "={{ $json.vt_malicious }}",
+            "VirusTotal Suspicious": "={{ $json.vt_suspicious }}",
+            "VirusTotal Reputation": "={{ $json.vt_reputation }}",
+            "AbuseIPDB Confidence": "={{ $json.abuse_score }}",
+            "AbuseIPDB Reports": "={{ $json.abuse_total_reports }}",
+            "TOR Exit Node": "={{ $json.abuse_is_tor }}",
+            "Whitelisted": "={{ $json.abuse_is_whitelisted }}",
+            "Country": "={{ $json.abuse_country }}",
+            "ISP": "={{ $json.abuse_isp }}",
+            "Analysis Summary": "={{ $json.analysis_summary }}",
+            "Recommended Action": "={{ $json.recommended_action }}",
+            "Event Time ": "={{ $json.event_time }}",
+            "Alert Source": "={{ $json.alert_source }}",
+            "Alert Name": "={{ $json.alert_name }}",
+            "Affected Host": "={{ $json.affected_host }}",
+            "Alert ID": "={{ $json.alert_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Event Time ",
+              "displayName": "Event Time ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Alert Source",
+              "displayName": "Alert Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Alert ID",
+              "displayName": "Alert ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Alert Name",
+              "displayName": "Alert Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Affected Host",
+              "displayName": "Affected Host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "IP Address",
+              "displayName": "IP Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risk Score",
+              "displayName": "Risk Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risk Level",
+              "displayName": "Risk Level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "VirusTotal Malicious",
+              "displayName": "VirusTotal Malicious",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "VirusTotal Suspicious",
+              "displayName": "VirusTotal Suspicious",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "VirusTotal Reputation",
+              "displayName": "VirusTotal Reputation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AbuseIPDB Confidence",
+              "displayName": "AbuseIPDB Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AbuseIPDB Reports",
+              "displayName": "AbuseIPDB Reports",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TOR Exit Node",
+              "displayName": "TOR Exit Node",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Whitelisted",
+              "displayName": "Whitelisted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ISP",
+              "displayName": "ISP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Analysis Summary",
+              "displayName": "Analysis Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommended Action",
+              "displayName": "Recommended Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        -400
+      ],
+      "id": "711110a9-34ec-4d2d-8ab9-11d206e7025e",
+      "name": "Append row in sheet"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "soc-ioc-alert",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -624,
+        -464
+      ],
+      "id": "b883543c-e8b0-4cb2-8ce4-19f8ddf0bfff",
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0f5ed068-f8e1-4d28-b8cd-3adeb24d4ed9",
+              "name": "ip_address",
+              "value": "={{ $json.body.source_ip }}",
+              "type": "string"
+            },
+            {
+              "id": "6c4eb7a5-b3c8-443b-abf6-736d442d6cc6",
+              "name": "alert_source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            },
+            {
+              "id": "7ded62a8-d278-4169-8d3e-52b7c0199b5a",
+              "name": "alert_id",
+              "value": "={{ $json.body.alert_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d22ac780-0e4a-4ba4-957a-e4047c3f05f9",
+              "name": "alert_name",
+              "value": "={{ $json.body.alert_name }}",
+              "type": "string"
+            },
+            {
+              "id": "2b634f3e-e20e-47fc-a71b-189b110d74dc",
+              "name": "affected_host",
+              "value": "={{ $json.body.host }}",
+              "type": "string"
+            },
+            {
+              "id": "8b9c1b4f-7b92-4991-b289-8337f2440f65",
+              "name": "event_time",
+              "value": "={{ $json.body.event_time }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -544,
+        -208
+      ],
+      "id": "757fd2e6-3897-42ed-88db-43107a8b4fe9",
+      "name": "Normalize Alert Data"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "VirusTotal - IP Reputation": {
+      "main": [
+        [
+          {
+            "node": "Extract VirusTotal Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AbuseIPDB - IP Reputation": {
+      "main": [
+        [
+          {
+            "node": "Extract AbuseIPDB Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract VirusTotal Results": {
+      "main": [
+        [
+          {
+            "node": "Merge Threat Intelligence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract AbuseIPDB Results": {
+      "main": [
+        [
+          {
+            "node": "Merge Threat Intelligence",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Threat Intelligence": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Low Alert Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Medium Alert Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "High Alert Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Critical Alert Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Critical Alert Formatter": {
+      "main": [
+        [
+          {
+            "node": "Send critical Alert Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Alert Formatter": {
+      "main": [
+        [
+          {
+            "node": "Send High Alert Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Low Alert Formatter": {
+      "main": [
+        [
+          {
+            "node": "Send Low Alert Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Medium Alert Formatter": {
+      "main": [
+        [
+          {
+            "node": "Send Medium Alert Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Alert Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Alert Data": {
+      "main": [
+        [
+          {
+            "node": "VirusTotal - IP Reputation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AbuseIPDB - IP Reputation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Threat Intelligence",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}
