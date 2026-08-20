@@ -30,24 +30,9 @@ The workflow performs the following process:
 
 ## Architecture
 
-The project follows the following high-level workflow:
+The workflow integrates multiple threat intelligence and automation components to perform IOC enrichment, risk assessment, alerting, and analyst investigation.
 
-Webhook / IOC Input  
-↓  
-VirusTotal + AbuseIPDB Threat Intelligence  
-↓  
-Data Merge & Normalization  
-↓  
-Risk Scoring & Severity Classification  
-↓  
-Google Sheets Investigation Log  
-↓  
-SOC Monitoring Dashboard  
-↓  
-Analyst Review & Decision
-
-The workflow also sends automated email notifications through Gmail based on the generated alert information.
-
+![SOC IOC Threat Intelligence Automation Architecture](Docs/Architecture.png)
 ---
 
 ## Technologies Used
