@@ -187,7 +187,7 @@ The example below shows a simulated CRITICAL IOC alert generated during workflow
 
 ![Critical IOC Email Alert](Docs/critical-alert-email.png)
 
-> **Note:** The alert shown below was generated as part of a simulated cybersecurity lab scenario.
+> **Note:** The alert shown above was generated as part of a simulated cybersecurity lab scenario.
 
 ## Project Status
 
