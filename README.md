@@ -90,6 +90,35 @@ This scoring model was developed for this portfolio/lab environment and is inten
 
 ---
 
+## Import & Setup
+
+A sanitized version of the n8n workflow is included in this repository:
+
+`workflow/soc-ioc-workflow-sanitized.json`
+
+### Setup Requirements
+
+To run the workflow, you will need:
+
+- An n8n instance
+- VirusTotal API access
+- AbuseIPDB API access
+- A Google account for Google Sheets and Gmail integration
+
+### Importing the Workflow
+
+1. Download `soc-ioc-workflow-sanitized.json` from the `workflow` directory.
+2. Open n8n and create a new workflow.
+3. Import the JSON workflow file.
+4. Configure your own VirusTotal and AbuseIPDB API credentials.
+5. Connect your own Google Sheets and Gmail credentials.
+6. Configure the Google Sheet used for investigation logging.
+7. Activate the workflow.
+8. Submit a test IP address to the webhook endpoint.
+
+> **Security Note:** API keys, OAuth credentials, webhook identifiers, email addresses, and Google Sheet identifiers have been removed from the public workflow export. Users must configure their own credentials before running the workflow.
+
+
 ## Key Features
 
 - Automated IP reputation enrichment
@@ -102,8 +131,6 @@ This scoring model was developed for this portfolio/lab environment and is inten
 - Analyst investigation status tracking
 - Analyst decision recording
 - Investigation notes and escalation tracking
-
----
 
 ---
 
