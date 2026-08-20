@@ -177,6 +177,17 @@ Testing confirmed that the workflow could:
 
 All test scenarios were performed in a controlled portfolio/lab environment using simulated alerts.
 
+## Automated Alert Notification
+
+When an IOC is classified, the workflow automatically routes the result through the appropriate severity path and generates an email notification for the analyst.
+
+The alert includes relevant investigation information such as the IOC, calculated risk score, severity level, and threat intelligence findings to support further analysis and escalation.
+
+The example below shows a simulated CRITICAL IOC alert generated during workflow testing.
+
+![Critical IOC Email Alert](Docs/critical-alert-email.png)
+
+> **Note:** The alert shown below was generated as part of a simulated cybersecurity lab scenario.
 
 ## Project Status
 
